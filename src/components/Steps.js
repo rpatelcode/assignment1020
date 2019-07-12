@@ -1,5 +1,6 @@
 import React from "react";
 import { Header, Container, Image, Step } from "semantic-ui-react";
+import logo from "../images/logo_city.gif";
 
 const Steps = props => {
   const StepChoose = () => {
@@ -124,7 +125,7 @@ const Steps = props => {
 
   return (
     <>
-      <Image src="./images/logo_city.gif" size="small" centered />
+      <Image src={logo} size="small" centered />
       <Header as="h2" textAlign="center" icon>
         Case Study Application
         <Header.Subheader>Take-home assignment</Header.Subheader>
