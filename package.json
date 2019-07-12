@@ -6,6 +6,7 @@
     "little-state-machine": "^2.4.0",
     "lodash": "^4.17.14",
     "react": "^16.8.6",
+    "react-dates": "^20.2.5",
     "react-dom": "^16.8.6",
     "react-hook-form": "^3.11.9",
     "react-scripts": "3.0.1",

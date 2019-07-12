@@ -141,7 +141,6 @@ const LoginForm = () => {
         >
           <Grid.Column style={{ maxWidth: 450 }}>
             <img border="0" src={logo} />
-            {/* <img border="0" src="./images/logo_city.gif" /> */}
 
             {!signupForm && (
               <>
