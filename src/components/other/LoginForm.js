@@ -6,12 +6,11 @@ import {
   Message,
   Grid,
   Header,
-  Segment,
-  Image
+  Segment
 } from "semantic-ui-react";
 import useForm from "react-hook-form";
-// import { login } from "./utils";
 import FormEnter from "../../components/Form";
+import _ from "lodash";
 
 const LoginForm = () => {
   useEffect(() => {
@@ -36,11 +35,6 @@ const LoginForm = () => {
     setValue("lastName", lastName);
     setValue("userName", userName);
     setValue("password", password);
-
-    // triggerValidation({ name: "firstName" });
-    // triggerValidation({ name: "lastName" });
-    // triggerValidation({ name: "userName" });
-    // triggerValidation({ name: "password" });
   }, []);
 
   const {
@@ -60,11 +54,24 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [signupForm, setSignupForm] = useState(false);
+  const [state, setState] = useState([]);
+
+  const [userCreated, setUserCreated] = useState(false);
+
+  const handleDismiss = () => {
+    // setUserCreated(false);
+
+    setTimeout(() => {
+      setUserCreated(false);
+    }, 1000);
+  };
 
   const login = async ({ userName, password }) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (userName === "demo" && password === "demo") {
+          resolve();
+        } else if (_.find(state, { userName: userName, password: password })) {
           resolve();
         } else {
           reject();
@@ -78,6 +85,7 @@ const LoginForm = () => {
 
     setError("");
     showLoader(true);
+    setUserCreated(false);
 
     try {
       await login({ userName, password });
@@ -93,19 +101,14 @@ const LoginForm = () => {
   const onSignUp = (data, e) => {
     e.preventDefault();
     setError("");
-    alert(JSON.stringify(data));
+    showLoader(true);
+    setState([...state, data]);
+    setUserCreated(true);
 
-    // showLoader(true);
-
-    // try {
-    //   await login({ userName, password });
-    //   setIsLoggedIn(true);
-    // } catch (error) {
-    //   setError("Incorrect User Name or Password!");
-    //   showLoader(false);
-    //   setuserName("");
-    //   setPassword("");
-    // }
+    setTimeout(() => {
+      setSignupForm(false);
+      showLoader(false);
+    }, 1000);
   };
 
   const logOut = () => {
@@ -114,7 +117,6 @@ const LoginForm = () => {
     setuserName("");
     setPassword("");
   };
-
   return (
     <>
       {isLoggedIn ? (
@@ -122,18 +124,10 @@ const LoginForm = () => {
           <Container style={{ marginTop: "1em" }} textAlign="right">
             <h3>
               Welcome {userName}!
-              <Button
-                basic
-                size="mini"
-                // fluid
-                onClick={logOut}
-                // style={{ marginTop: "2em" }}
-              >
+              <Button basic size="mini" onClick={logOut}>
                 Log Out
               </Button>
             </h3>
-
-            {/* <Button onClick={() => setIsLoggedIn(false)}>Log Out</Button> */}
           </Container>
 
           <FormEnter />
@@ -157,7 +151,17 @@ const LoginForm = () => {
                 <Header as="h2" textAlign="center">
                   Log-in required to see a demo
                 </Header>
+
+                {userCreated && (
+                  <Message
+                    positive
+                    onDismiss={handleDismiss}
+                    header="New User Created!"
+                    content="You can use it's credential to login now."
+                  />
+                )}
                 {error && <Message error content={error} />}
+
                 <Form onSubmit={onSubmit} size="large">
                   <Segment stacked>
                     <Form.Input
@@ -183,7 +187,6 @@ const LoginForm = () => {
                     </Button>
                   </Segment>
                 </Form>
-
                 <Button
                   basic
                   fluid
@@ -203,7 +206,7 @@ const LoginForm = () => {
                   <Message
                     error
                     content={
-                      "Password must have 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character]"
+                      "Password must have 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
                     }
                   />
                 )}
@@ -263,10 +266,6 @@ const LoginForm = () => {
                       required
                       error={errors.password ? true : false}
                     />
-
-                    {/* <Button primary fluid size="large" disabled={isLoading}>
-                      {isLoading ? "Signing in..." : "Sign Up"}
-                    </Button> */}
                     <Button
                       primary
                       fluid
@@ -276,10 +275,11 @@ const LoginForm = () => {
                         (formState.dirty && !formState.isValid)
                       }
                     >
-                      Sign Up
+                      {isLoading ? "Signing Up..." : "Sign Up"}
                     </Button>
                   </Segment>
                 </Form>
+
                 <Button
                   basic
                   fluid
