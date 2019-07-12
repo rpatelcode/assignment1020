@@ -11,6 +11,7 @@ import {
 import useForm from "react-hook-form";
 import FormEnter from "../../components/Form";
 import _ from "lodash";
+import logo from "../../images/logo_city.gif";
 
 const LoginForm = () => {
   useEffect(() => {
@@ -139,12 +140,8 @@ const LoginForm = () => {
           verticalAlign="middle"
         >
           <Grid.Column style={{ maxWidth: 450 }}>
-            <a
-              href="https://docs.google.com/presentation/d/1_kUiApI9sZp_nXZocQ_lzJnzNjNdSLPnVYzYhCd7zrU/edit?usp=sharing"
-              target="blank"
-            >
-              <img border="0" src="./images/logo_city.gif" />
-            </a>
+            <img border="0" src={logo} />
+            {/* <img border="0" src="./images/logo_city.gif" /> */}
 
             {!signupForm && (
               <>
