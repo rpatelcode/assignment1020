@@ -60,10 +60,40 @@ const FormEnter = () => {
     register({ name: "cones" });
     register({ name: "signs" });
 
-    register({ name: "generalComments" });
+    register({ name: "generalComments" }, { required: true });
     register({ name: "odometerStart" }, { required: true });
     register({ name: "odometerEnd" }, { required: true });
     register({ name: "personalUse" });
+
+    // setValue("ownership", "no");
+    // setValue("insurance", "no");
+    // setValue("plateSticker", "no");
+    // setValue("firstAidKit", "no");
+
+    // setValue("accidentForm", "no");
+    // setValue("exteriorBody", "no");
+    // setValue("fluidLeaks", "no");
+    // setValue("tireInflation", "no");
+
+    // setValue("wheelsCondition", "no");
+    // setValue("steering", "no");
+    // setValue("brake", "no");
+    // setValue("dashboardWarning", "no");
+
+    // setValue("lights", "no");
+    // setValue("signal", "no");
+    // setValue("mirrors", "no");
+    // setValue("windshield", "no");
+
+    // setValue("wipers", "no");
+    // setValue("defroster", "no");
+    // setValue("horn", "no");
+    // setValue("backupAlarm", "no");
+
+    // setValue("beacon", "no");
+    // setValue("tc12", "no");
+    // setValue("cones", "no");
+    // setValue("signs", "no");
   }, []);
 
   const {
@@ -79,11 +109,17 @@ const FormEnter = () => {
   // for Dimmer
   const [state, setState] = useState();
   const [active, setactive] = useState(false);
-  const handleOpen = () => setactive(true);
+  const handleOpen = () =>
+    setTimeout(() => {
+      setactive(true);
+    }, 1000);
+
   const handleClose = () => setactive(false);
 
-  // for form
+  // used for date
   const [focused, setFocused] = useState(false);
+
+  // for form ON/Off fields
 
   const [ownership, setownership] = useState(false);
   const [insurance, setinsurance] = useState(false);
@@ -118,12 +154,11 @@ const FormEnter = () => {
   const onSubmitReport = (data, e) => {
     e.preventDefault();
     setState(data);
-    console.log(data);
   };
 
   const temp = [
     exteriorBody ? "Exterior Body" : null,
-    fluidLeaks ? "Gluid Leaks" : null,
+    fluidLeaks ? "Fluid Leaks" : null,
     steering ? "Steering" : null,
     brake ? "Brake" : null,
     dashboardWarning ? "Dashboard Warning" : null
@@ -142,6 +177,8 @@ const FormEnter = () => {
       );
     } else return null;
   };
+
+  console.log(formState);
 
   return (
     <Container style={{ marginTop: "2em" }}>
@@ -162,8 +199,8 @@ const FormEnter = () => {
               name="vehicleNum"
               control={Select}
               options={vehicleList}
-              label="Select Vehicle Number"
-              placeholder="Select Vehicle Number"
+              label="List of vehicles"
+              placeholder="List of vehicles"
               onChange={async (e, { name, value }) => {
                 setValue(name, value);
                 await triggerValidation({ name });
@@ -178,10 +215,9 @@ const FormEnter = () => {
               <SingleDatePicker
                 id="date"
                 numberOfMonths={1}
-                onDateChange={async date => {
+                onDateChange={date => {
                   let name = "date";
                   setValue(name, date);
-                  await triggerValidation({ name });
                 }}
                 onFocusChange={({ focused }) => setFocused(focused)}
                 focused={focused}
@@ -196,11 +232,15 @@ const FormEnter = () => {
                 name="ownership"
                 label="Ownership"
                 value={ownership ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setownership(!ownership);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
+                // onChange={async (e, { name, value }) => {
+                //   setownership(!ownership);
+                //   setValue(name, value);
+                //   await triggerValidation({ name });
+                // }}
                 toggle
               />
             </Form.Field>
@@ -209,11 +249,15 @@ const FormEnter = () => {
                 name="insurance"
                 label="Insurance"
                 value={insurance ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setinsurance(!insurance);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
+                // onChange={async (e, { name, value }) => {
+                //   setinsurance(!insurance);
+                //   setValue(name, value);
+                //   await triggerValidation({ name });
+                // }}
                 toggle
               />
             </Form.Field>
@@ -222,10 +266,14 @@ const FormEnter = () => {
                 name="plateSticker"
                 label="Plate Sticker"
                 value={plateSticker ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                // onChange={async (e, { name, value }) => {
+                //   setplateSticker(!plateSticker);
+                //   setValue(name, value);
+                //   await triggerValidation({ name });
+                // }}
+                onChange={(e, { name, value }) => {
                   setplateSticker(!plateSticker);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -235,10 +283,14 @@ const FormEnter = () => {
                 name="firstAidKit"
                 label="First Aid Kit"
                 value={firstAidKit ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                // onChange={async (e, { name, value }) => {
+                //   setfirstAidKit(!firstAidKit);
+                //   setValue(name, value);
+                //   await triggerValidation({ name });
+                // }}
+                onChange={(e, { name, value }) => {
                   setfirstAidKit(!firstAidKit);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -251,10 +303,9 @@ const FormEnter = () => {
                 label="Accident Form"
                 defaulvalue="no"
                 value={accidentForm ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setaccidentForm(!accidentForm);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -265,10 +316,9 @@ const FormEnter = () => {
                 label="Exterior Body"
                 defaulvalue="no"
                 value={exteriorBody ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setexteriorBody(!exteriorBody);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -279,10 +329,9 @@ const FormEnter = () => {
                 label="Fluid Leaks"
                 defaulvalue="no"
                 value={fluidLeaks ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setfluidLeaks(!fluidLeaks);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -293,10 +342,9 @@ const FormEnter = () => {
                 label="Tire Inflation"
                 defaulvalue="no"
                 value={tireInflation ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   settireInflation(!tireInflation);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -310,10 +358,9 @@ const FormEnter = () => {
                 label="Wheels Condition"
                 defaulvalue="no"
                 value={wheelsCondition ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setwheelsCondition(!wheelsCondition);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -324,10 +371,9 @@ const FormEnter = () => {
                 label="Steering"
                 defaulvalue="no"
                 value={steering ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setsteering(!steering);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -338,10 +384,9 @@ const FormEnter = () => {
                 label="Brake"
                 defaulvalue="no"
                 value={brake ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setbrake(!brake);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -351,11 +396,10 @@ const FormEnter = () => {
                 name="dashboardWarning"
                 label="Dashboard Warning"
                 defaulvalue="no"
-                value={tireInflation ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                value={dashboardWarning ? "no" : "yes"}
+                onChange={(e, { name, value }) => {
                   setdashboardWarning(!dashboardWarning);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -369,10 +413,9 @@ const FormEnter = () => {
                 label="Lights"
                 defaulvalue="no"
                 value={lights ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setlights(!lights);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -383,10 +426,9 @@ const FormEnter = () => {
                 label="Signal"
                 defaulvalue="no"
                 value={signal ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setsignal(!signal);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -397,10 +439,9 @@ const FormEnter = () => {
                 label="Mirrors"
                 defaulvalue="no"
                 value={mirrors ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setmirrors(!mirrors);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -411,10 +452,9 @@ const FormEnter = () => {
                 label="Windshield"
                 defaulvalue="no"
                 value={windshield ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setwindshield(!windshield);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -428,10 +468,9 @@ const FormEnter = () => {
                 label="Wipers"
                 defaulvalue="no"
                 value={wipers ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setwipers(!wipers);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -442,10 +481,9 @@ const FormEnter = () => {
                 label="Defroster"
                 defaulvalue="no"
                 value={defroster ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setdefroster(!defroster);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -456,10 +494,9 @@ const FormEnter = () => {
                 label="Horn"
                 defaulvalue="no"
                 value={horn ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   sethorn(!horn);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -470,10 +507,9 @@ const FormEnter = () => {
                 label="Backup Alarm"
                 defaulvalue="no"
                 value={backupAlarm ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setbackupAlarm(!backupAlarm);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -487,10 +523,9 @@ const FormEnter = () => {
                 label="Beacon"
                 defaulvalue="no"
                 value={beacon ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setbeacon(!beacon);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -501,10 +536,9 @@ const FormEnter = () => {
                 label="TC-12"
                 defaulvalue="no"
                 value={tc12 ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   settc12(!tc12);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -515,10 +549,9 @@ const FormEnter = () => {
                 label="Cones"
                 defaulvalue="no"
                 value={cones ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                onChange={(e, { name, value }) => {
                   setcones(!cones);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -528,11 +561,10 @@ const FormEnter = () => {
                 name="signs"
                 label="Signs"
                 defaulvalue="no"
-                value={backupAlarm ? "no" : "yes"}
-                onChange={async (e, { name, value }) => {
+                value={signs ? "no" : "yes"}
+                onChange={(e, { name, value }) => {
                   setsigns(!signs);
                   setValue(name, value);
-                  await triggerValidation({ name });
                 }}
                 toggle
               />
@@ -572,9 +604,8 @@ const FormEnter = () => {
               control={Input}
               label="Personal Use"
               placeholder="Personal Use"
-              onChange={async (e, { name, value }) => {
+              onChange={(e, { name, value }) => {
                 setValue(name, value);
-                await triggerValidation({ name });
               }}
             />
           </Form.Group>
@@ -604,6 +635,8 @@ const FormEnter = () => {
                 setValue(name, value);
                 await triggerValidation({ name });
               }}
+              required
+              error={errors.generalComments ? true : false}
             />
           </Form.Group>
 
