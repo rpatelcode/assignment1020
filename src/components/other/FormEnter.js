@@ -10,7 +10,8 @@ import {
   TextArea,
   Select,
   Header,
-  Dimmer
+  Dimmer,
+  Loader
 } from "semantic-ui-react";
 import useForm from "react-hook-form";
 import "react-dates/initialize";
@@ -64,36 +65,6 @@ const FormEnter = () => {
     register({ name: "odometerStart" }, { required: true });
     register({ name: "odometerEnd" }, { required: true });
     register({ name: "personalUse" });
-
-    // setValue("ownership", "no");
-    // setValue("insurance", "no");
-    // setValue("plateSticker", "no");
-    // setValue("firstAidKit", "no");
-
-    // setValue("accidentForm", "no");
-    // setValue("exteriorBody", "no");
-    // setValue("fluidLeaks", "no");
-    // setValue("tireInflation", "no");
-
-    // setValue("wheelsCondition", "no");
-    // setValue("steering", "no");
-    // setValue("brake", "no");
-    // setValue("dashboardWarning", "no");
-
-    // setValue("lights", "no");
-    // setValue("signal", "no");
-    // setValue("mirrors", "no");
-    // setValue("windshield", "no");
-
-    // setValue("wipers", "no");
-    // setValue("defroster", "no");
-    // setValue("horn", "no");
-    // setValue("backupAlarm", "no");
-
-    // setValue("beacon", "no");
-    // setValue("tc12", "no");
-    // setValue("cones", "no");
-    // setValue("signs", "no");
   }, []);
 
   const {
@@ -106,13 +77,18 @@ const FormEnter = () => {
     formState
   } = useForm({ mode: "onChange" });
 
+  // for loader
+  const [loader, setLoader] = useState(false);
   // for Dimmer
   const [state, setState] = useState();
   const [active, setactive] = useState(false);
-  const handleOpen = () =>
+  const handleOpen = () => {
+    setactive(true);
+    setLoader(true);
     setTimeout(() => {
-      setactive(true);
-    }, 1000);
+      setLoader(false);
+    }, 2000);
+  };
 
   const handleClose = () => setactive(false);
 
@@ -185,7 +161,7 @@ const FormEnter = () => {
       <div>
         <Message
           attached
-          header="Vehicle Inspection Report"
+          header="Daily Vehicle Inspection Report"
           content="Daily vehicle inspection report"
         />
         <Form
@@ -236,11 +212,6 @@ const FormEnter = () => {
                   setownership(!ownership);
                   setValue(name, value);
                 }}
-                // onChange={async (e, { name, value }) => {
-                //   setownership(!ownership);
-                //   setValue(name, value);
-                //   await triggerValidation({ name });
-                // }}
                 toggle
               />
             </Form.Field>
@@ -253,11 +224,6 @@ const FormEnter = () => {
                   setinsurance(!insurance);
                   setValue(name, value);
                 }}
-                // onChange={async (e, { name, value }) => {
-                //   setinsurance(!insurance);
-                //   setValue(name, value);
-                //   await triggerValidation({ name });
-                // }}
                 toggle
               />
             </Form.Field>
@@ -266,11 +232,6 @@ const FormEnter = () => {
                 name="plateSticker"
                 label="Plate Sticker"
                 value={plateSticker ? "no" : "yes"}
-                // onChange={async (e, { name, value }) => {
-                //   setplateSticker(!plateSticker);
-                //   setValue(name, value);
-                //   await triggerValidation({ name });
-                // }}
                 onChange={(e, { name, value }) => {
                   setplateSticker(!plateSticker);
                   setValue(name, value);
@@ -283,11 +244,6 @@ const FormEnter = () => {
                 name="firstAidKit"
                 label="First Aid Kit"
                 value={firstAidKit ? "no" : "yes"}
-                // onChange={async (e, { name, value }) => {
-                //   setfirstAidKit(!firstAidKit);
-                //   setValue(name, value);
-                //   await triggerValidation({ name });
-                // }}
                 onChange={(e, { name, value }) => {
                   setfirstAidKit(!firstAidKit);
                   setValue(name, value);
@@ -660,17 +616,22 @@ const FormEnter = () => {
           Registrar General, P.O. Box 468900 10899, Green River Road, Thunder
           Bay, ON P7X 6HT8 or at 1-87090-47691-21956 or 4816-32895-839805.
         </Message>
+
         <Dimmer active={active} onClickOutside={handleClose} page>
-          <Header as="h2" icon inverted>
-            <Icon name="check circle outline" />
-            Submitted!
-            <Header.Subheader>
-              Take-home assignment completed, Your data will be discarded.
-              <pre>
-                <b>Global State:</b> {JSON.stringify(state, null, 2)}
-              </pre>
-            </Header.Subheader>
-          </Header>
+          {loader ? (
+            <Loader content="Submitting" size="large" />
+          ) : (
+            <Header as="h2" icon inverted>
+              <Icon name="check circle outline" />
+              Submitted!
+              <Header.Subheader>
+                Take-home assignment completed, Your data will be discarded.
+                <pre>
+                  <b>Global State:</b> {JSON.stringify(state, null, 2)}
+                </pre>
+              </Header.Subheader>
+            </Header>
+          )}
         </Dimmer>
       </div>
     </Container>

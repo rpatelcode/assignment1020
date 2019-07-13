@@ -208,12 +208,13 @@ const LoginForm = () => {
                 )}
 
                 <Form onSubmit={handleSubmit(onSignUp)} size="large">
-                  <Segment stacked>
+                  <Segment textAlign="left" stacked>
                     <Form.Input
                       id="firstName"
                       name="firstName"
                       fluid
                       placeholder="First Name"
+                      label="First Name"
                       onChange={async (e, { name, value }) => {
                         setValue(name, value);
                         await triggerValidation({ name });
@@ -226,6 +227,7 @@ const LoginForm = () => {
                       name="lastName"
                       fluid
                       placeholder="Last Name"
+                      label="Last Name"
                       onChange={async (e, { name, value }) => {
                         setValue(name, value);
                         await triggerValidation({ name });
@@ -240,6 +242,7 @@ const LoginForm = () => {
                       icon="mail outline"
                       iconPosition="left"
                       placeholder="Email"
+                      label="Email"
                       onChange={async (e, { name, value }) => {
                         setValue(name, value);
                         await triggerValidation({ name });
@@ -255,6 +258,7 @@ const LoginForm = () => {
                       iconPosition="left"
                       placeholder="Password"
                       type="password"
+                      label="Password"
                       onChange={async (e, { name, value }) => {
                         setValue(name, value);
                         await triggerValidation({ name });
