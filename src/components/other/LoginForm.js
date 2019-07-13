@@ -9,7 +9,7 @@ import {
   Segment
 } from "semantic-ui-react";
 import useForm from "react-hook-form";
-import FormEnter from "../../components/Form";
+import FormEnter from "../../components/other/FormEnter";
 import _ from "lodash";
 import logo from "../../images/logo_city.gif";
 
@@ -124,7 +124,7 @@ const LoginForm = () => {
         <>
           <Container style={{ marginTop: "1em" }} textAlign="right">
             <h3>
-              Welcome {userName}!
+              Welcome {userName}! {"  "}
               <Button basic size="mini" onClick={logOut}>
                 Log Out
               </Button>
@@ -140,7 +140,7 @@ const LoginForm = () => {
           verticalAlign="middle"
         >
           <Grid.Column style={{ maxWidth: 450 }}>
-            <img border="0" src={logo} />
+            <img border="0" alt="logo" src={logo} />
 
             {!signupForm && (
               <>

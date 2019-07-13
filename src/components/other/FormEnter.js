@@ -8,9 +8,9 @@ import {
   Icon,
   Radio,
   TextArea,
-  Grid,
+  Select,
   Header,
-  Segment
+  Dimmer
 } from "semantic-ui-react";
 import useForm from "react-hook-form";
 import "react-dates/initialize";
@@ -18,12 +18,17 @@ import { SingleDatePicker } from "react-dates";
 // import FormEnter from "../../components/Form";
 import _ from "lodash";
 import "../../css/_datepicker.css";
-import logo from "../../images/logo_city.gif";
+
+const vehicleList = [
+  { key: "vh1", text: "003018", value: "003018" },
+  { key: "vh2", text: "004879", value: "004879" },
+  { key: "vh3", text: "092100", value: "092100" }
+];
 
 const FormEnter = () => {
   useEffect(() => {
     register({ name: "vehicleNum" }, { required: true });
-    register({ name: "date" }, { required: true });
+    register({ name: "date" });
 
     register({ name: "ownership" });
     register({ name: "insurance" });
@@ -56,8 +61,8 @@ const FormEnter = () => {
     register({ name: "signs" });
 
     register({ name: "generalComments" });
-    register({ name: "odometerStart" });
-    register({ name: "odometerEnd" });
+    register({ name: "odometerStart" }, { required: true });
+    register({ name: "odometerEnd" }, { required: true });
     register({ name: "personalUse" });
   }, []);
 
@@ -71,6 +76,13 @@ const FormEnter = () => {
     formState
   } = useForm({ mode: "onChange" });
 
+  // for Dimmer
+  const [state, setState] = useState();
+  const [active, setactive] = useState(false);
+  const handleOpen = () => setactive(true);
+  const handleClose = () => setactive(false);
+
+  // for form
   const [focused, setFocused] = useState(false);
 
   const [ownership, setownership] = useState(false);
@@ -105,11 +117,34 @@ const FormEnter = () => {
 
   const onSubmitReport = (data, e) => {
     e.preventDefault();
+    setState(data);
     console.log(data);
   };
 
+  const temp = [
+    exteriorBody ? "Exterior Body" : null,
+    fluidLeaks ? "Gluid Leaks" : null,
+    steering ? "Steering" : null,
+    brake ? "Brake" : null,
+    dashboardWarning ? "Dashboard Warning" : null
+  ];
+
+  const messageArray = _.without(temp, null);
+
+  const ShowError = () => {
+    if (messageArray.length > 0) {
+      return (
+        <Message
+          warning
+          header="If following marked as ON then must supply issue in general comments"
+          list={messageArray}
+        />
+      );
+    } else return null;
+  };
+
   return (
-    <Container>
+    <Container style={{ marginTop: "2em" }}>
       <div>
         <Message
           attached
@@ -125,9 +160,10 @@ const FormEnter = () => {
             <Form.Field
               id="vehicleNum"
               name="vehicleNum"
-              control={Input}
-              label="vehicleNum"
-              placeholder="vehicleNum"
+              control={Select}
+              options={vehicleList}
+              label="Select Vehicle Number"
+              placeholder="Select Vehicle Number"
               onChange={async (e, { name, value }) => {
                 setValue(name, value);
                 await triggerValidation({ name });
@@ -136,8 +172,8 @@ const FormEnter = () => {
               error={errors.vehicleNum ? true : false}
             />
 
-            <Form.Field required error={errors.proposedDate ? true : false}>
-              <label>Intended Date of Marriage</label>
+            <Form.Field>
+              <label>Date</label>
               <Icon name="calendar alternate outline" size="large" />
               <SingleDatePicker
                 id="date"
@@ -158,7 +194,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="ownership"
-                label="ownership"
+                label="Ownership"
                 value={ownership ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
                   setownership(!ownership);
@@ -171,7 +207,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="insurance"
-                label="insurance"
+                label="Insurance"
                 value={insurance ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
                   setinsurance(!insurance);
@@ -184,7 +220,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="plateSticker"
-                label="plateSticker"
+                label="Plate Sticker"
                 value={plateSticker ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
                   setplateSticker(!plateSticker);
@@ -197,7 +233,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="firstAidKit"
-                label="firstAidKit"
+                label="First Aid Kit"
                 value={firstAidKit ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
                   setfirstAidKit(!firstAidKit);
@@ -212,7 +248,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="accidentForm"
-                label="accidentForm"
+                label="Accident Form"
                 defaulvalue="no"
                 value={accidentForm ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -226,7 +262,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="exteriorBody"
-                label="exteriorBody"
+                label="Exterior Body"
                 defaulvalue="no"
                 value={exteriorBody ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -240,7 +276,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="fluidLeaks"
-                label="fluidLeaks"
+                label="Fluid Leaks"
                 defaulvalue="no"
                 value={fluidLeaks ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -254,7 +290,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="tireInflation"
-                label="tireInflation"
+                label="Tire Inflation"
                 defaulvalue="no"
                 value={tireInflation ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -271,7 +307,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="wheelsCondition"
-                label="wheelsCondition"
+                label="Wheels Condition"
                 defaulvalue="no"
                 value={wheelsCondition ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -285,7 +321,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="steering"
-                label="steering"
+                label="Steering"
                 defaulvalue="no"
                 value={steering ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -299,7 +335,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="brake"
-                label="brake"
+                label="Brake"
                 defaulvalue="no"
                 value={brake ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -313,7 +349,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="dashboardWarning"
-                label="dashboardWarning"
+                label="Dashboard Warning"
                 defaulvalue="no"
                 value={tireInflation ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -330,7 +366,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="lights"
-                label="lights"
+                label="Lights"
                 defaulvalue="no"
                 value={lights ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -344,7 +380,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="signal"
-                label="signal"
+                label="Signal"
                 defaulvalue="no"
                 value={signal ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -358,7 +394,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="mirrors"
-                label="mirrors"
+                label="Mirrors"
                 defaulvalue="no"
                 value={mirrors ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -372,7 +408,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="windshield"
-                label="windshield"
+                label="Windshield"
                 defaulvalue="no"
                 value={windshield ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -389,7 +425,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="wipers"
-                label="wipers"
+                label="Wipers"
                 defaulvalue="no"
                 value={wipers ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -403,7 +439,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="defroster"
-                label="defroster"
+                label="Defroster"
                 defaulvalue="no"
                 value={defroster ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -417,7 +453,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="horn"
-                label="horn"
+                label="Horn"
                 defaulvalue="no"
                 value={horn ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -431,7 +467,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="backupAlarm"
-                label="backupAlarm"
+                label="Backup Alarm"
                 defaulvalue="no"
                 value={backupAlarm ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -448,7 +484,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="beacon"
-                label="beacon"
+                label="Beacon"
                 defaulvalue="no"
                 value={beacon ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -462,7 +498,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="tc12"
-                label="tc12"
+                label="TC-12"
                 defaulvalue="no"
                 value={tc12 ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -476,7 +512,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="cones"
-                label="cones"
+                label="Cones"
                 defaulvalue="no"
                 value={cones ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -490,7 +526,7 @@ const FormEnter = () => {
             <Form.Field>
               <Radio
                 name="signs"
-                label="signs"
+                label="Signs"
                 defaulvalue="no"
                 value={backupAlarm ? "no" : "yes"}
                 onChange={async (e, { name, value }) => {
@@ -508,30 +544,34 @@ const FormEnter = () => {
               id="odometerStart"
               name="odometerStart"
               control={Input}
-              label="odometerStart"
-              placeholder="odometerStart"
+              label="Odometer Start"
+              placeholder="Odometer Start"
               onChange={async (e, { name, value }) => {
                 setValue(name, value);
                 await triggerValidation({ name });
               }}
+              required
+              error={errors.odometerStart ? true : false}
             />
             <Form.Field
               id="odometerEnd"
               name="odometerEnd"
               control={Input}
-              label="odometerEnd"
-              placeholder="odometerEnd"
+              label="Odometer End"
+              placeholder="Odometer End"
               onChange={async (e, { name, value }) => {
                 setValue(name, value);
                 await triggerValidation({ name });
               }}
+              required
+              error={errors.odometerEnd ? true : false}
             />
             <Form.Field
               id="personalUse"
               name="personalUse"
               control={Input}
-              label="personalUse"
-              placeholder="personalUse"
+              label="Personal Use"
+              placeholder="Personal Use"
               onChange={async (e, { name, value }) => {
                 setValue(name, value);
                 await triggerValidation({ name });
@@ -540,50 +580,43 @@ const FormEnter = () => {
           </Form.Group>
 
           <Form.Group widths="equal">
-            <Form.Field>
+            {/* <Form.Field>
               <TextArea
                 id="generalComments"
                 name="generalComments"
-                label="generalComments"
                 placeholder="generalComments"
+                label="General Comments"
                 onChange={async (e, { name, value }) => {
                   setValue(name, value);
                   await triggerValidation({ name });
                 }}
-                placeholder="Tell us more"
+                placeholder="General Comments"
               />
-            </Form.Field>
+            </Form.Field> */}
 
-            {/* <Form.Field
+            <Form.Field
               id="generalComments"
               name="generalComments"
-              control={Input}
-              label="generalComments"
-              placeholder="generalComments"
+              control={TextArea}
+              label="General Comments"
+              placeholder="General Comments"
               onChange={async (e, { name, value }) => {
                 setValue(name, value);
                 await triggerValidation({ name });
               }}
-            /> */}
+            />
           </Form.Group>
 
           <Button
-            content="Next"
-            icon="right arrow"
-            labelPosition="right"
+            content="Submit"
             primary
             disabled={
               !formState.dirty || (formState.dirty && !formState.isValid)
             }
+            onClick={handleOpen}
           />
         </Form>
-        <Message
-          warning
-          header="Could you check something!"
-          list={[
-            "That e-mail has been subscribed, but you have not yet clicked the verification link in your e-mail."
-          ]}
-        />
+        <ShowError />
         <Message attached="bottom">
           Tracking vehicle inspection and Mileage registry is a system that was
           launched in 2004. The system is currently being used to manage and
@@ -594,6 +627,18 @@ const FormEnter = () => {
           Registrar General, P.O. Box 468900 10899, Green River Road, Thunder
           Bay, ON P7X 6HT8 or at 1-87090-47691-21956 or 4816-32895-839805.
         </Message>
+        <Dimmer active={active} onClickOutside={handleClose} page>
+          <Header as="h2" icon inverted>
+            <Icon name="check circle outline" />
+            Submitted!
+            <Header.Subheader>
+              Take-home assignment completed, Your data will be discarded.
+              <pre>
+                <b>Global State:</b> {JSON.stringify(state, null, 2)}
+              </pre>
+            </Header.Subheader>
+          </Header>
+        </Dimmer>
       </div>
     </Container>
   );

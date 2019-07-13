@@ -1,7 +1,7 @@
 import React from "react";
 
-// import LoginForm from "./components/other/LoginForm";
-import FormEnter from "./components/other/FormEnter";
+import LoginForm from "./components/other/LoginForm";
+// import FormEnter from "./components/other/FormEnter";
 
 import {
   StateMachineProvider,
@@ -19,8 +19,8 @@ createStore({
 function App() {
   return (
     <StateMachineProvider>
-      {/* <LoginForm /> */}
-      <FormEnter />
+      <LoginForm />
+      {/* <FormEnter /> */}
     </StateMachineProvider>
   );
 }
