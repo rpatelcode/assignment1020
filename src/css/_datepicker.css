@@ -789,3 +789,8 @@
   width: 15px;
   fill: #cacccd;
 }
+
+/* used to bring checkbox bottom of DatePicker */
+.checkbox {
+  z-index: 0;
+}

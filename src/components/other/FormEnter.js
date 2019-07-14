@@ -154,7 +154,7 @@ const FormEnter = () => {
     } else return null;
   };
 
-  console.log(formState);
+  // console.log(formState);
 
   return (
     <Container style={{ marginTop: "2em" }}>

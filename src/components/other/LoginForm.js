@@ -72,6 +72,8 @@ const LoginForm = () => {
       setTimeout(() => {
         if (userName === "demo@demo.com" && password === "demo") {
           resolve();
+        } else if (userName === "demo" && password === "demo") {
+          resolve();
         } else if (_.find(state, { userName: userName, password: password })) {
           resolve();
         } else {
