@@ -627,7 +627,7 @@ const FormEnter = () => {
               <Header.Subheader>
                 Take-home assignment completed, Your data will be discarded.
                 <pre>
-                  <b>Global State:</b> {JSON.stringify(state, null, 2)}
+                  <b>Data:</b> {JSON.stringify(state, null, 2)}
                 </pre>
               </Header.Subheader>
             </Header>

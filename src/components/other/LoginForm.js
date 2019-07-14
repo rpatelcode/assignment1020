@@ -70,7 +70,7 @@ const LoginForm = () => {
   const login = async ({ userName, password }) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (userName === "demo" && password === "demo") {
+        if (userName === "demo@demo.com" && password === "demo") {
           resolve();
         } else if (_.find(state, { userName: userName, password: password })) {
           resolve();
