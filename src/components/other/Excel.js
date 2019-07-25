@@ -36,7 +36,14 @@ const Excel = () => {
   //     });
 
   useEffect(() => {
-    register({ name: "csv" }, { required: true });
+    register(
+      { name: "csv" },
+      {
+        required: true,
+        // pattern: /,|\r?\n|"(\\"|[^"])*?"/g
+        pattern: /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|"([^""]*(?:"[\S\s][^""]*)*)"|([^,'"\s\\]*(?:\s+[^,'"\s\\]+)*))\s*(?:,|$)/g
+      }
+    );
   }, []);
   const {
     register,
@@ -72,7 +79,11 @@ const Excel = () => {
         // console.log(jsonObj); // => [["1","2","3"], ["4","5","6"], ["7","8","9"]]
         setState(jsonObj);
       });
+
+    // <ExcelTable data={state} />;
   };
+
+  // console.log("state", state);
 
   return (
     <Container style={{ marginTop: "2em" }}>
@@ -94,15 +105,15 @@ const Excel = () => {
               control={TextArea}
               label="General Comments"
               placeholder="General Comments"
-              value={`Agreed Date,Agreed Amount,Minicipal Tax
-              19-Oct-2018,56000,3333
-              19-Nov-2018,20000,3333
-              19-Dec-2018,28000,3333
-              19-Jan-2019,28000,3333
-              19-Feb-2019,28000,3333
-              19-Mar-2019,28000,3333
-              19-Apr-2019,28000,3333
-              30-Apr-2019,10267,1222`}
+              defaultValue={`date,number,4digit, 5digit
+              19-Oct-2018,56000,3333,55555
+              19-Nov-2018,20000,3333,55555
+              19-Dec-2018,28000,3333,55555
+              19-Jan-2019,28000,3333,55555
+              19-Feb-2019,28000,3333,55555
+              19-Mar-2019,28000,3333,55555
+              19-Apr-2019,28000,3333,55555
+              30-Apr-2019,10267,1222,55555`}
               onChange={async (e, { name, value }) => {
                 setValue(name, value);
                 await triggerValidation({ name });
@@ -136,7 +147,6 @@ const Excel = () => {
         {
           //   loader ? <Loader content="Submitting" size="large" /> : null
         }
-        {/* Loading... {console.log("state", state)} */}
         <ExcelTable data={state} />
       </div>
     </Container>
