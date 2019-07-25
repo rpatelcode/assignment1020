@@ -9,9 +9,10 @@ import {
   Segment
 } from "semantic-ui-react";
 import useForm from "react-hook-form";
-import FormEnter from "../../components/other/FormEnter";
+// import FormEnter from "../../components/other/FormEnter";
+import FormEnter from "../../components/other/Excel";
 import _ from "lodash";
-import logo from "../../images/logo_city.gif";
+// import logo from "../../images/logo_city.gif";
 
 const LoginForm = () => {
   useEffect(() => {
@@ -27,8 +28,7 @@ const LoginForm = () => {
     register(
       { name: "password" },
       {
-        required: true,
-        pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+        required: true
       }
     );
 
@@ -142,7 +142,7 @@ const LoginForm = () => {
           verticalAlign="middle"
         >
           <Grid.Column style={{ maxWidth: 450 }}>
-            <img border="0" alt="logo" src={logo} />
+            {/* <img border="0" alt="logo" src={logo} /> */}
 
             {!signupForm && (
               <>
@@ -201,12 +201,7 @@ const LoginForm = () => {
                   Sign Up
                 </Header>
                 {errors.password && (
-                  <Message
-                    error
-                    content={
-                      "Password must have 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
-                    }
-                  />
+                  <Message error content={"Password must not be blank"} />
                 )}
 
                 <Form onSubmit={handleSubmit(onSignUp)} size="large">

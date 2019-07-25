@@ -4,11 +4,10 @@ import {
   Button,
   Form,
   Message,
-  Icon,
+  Divider,
   TextArea,
-  Header,
-  Dimmer,
-  Loader
+  Loader,
+  Segment
 } from "semantic-ui-react";
 import useForm from "react-hook-form";
 import { csv } from "csvtojson";
@@ -64,7 +63,7 @@ const Excel = () => {
     setLoader(true);
     setTimeout(() => {
       setLoader(false);
-    }, 1);
+    }, 1000);
   };
 
   const onSubmitReport = (data, e) => {
@@ -90,8 +89,8 @@ const Excel = () => {
       <div>
         <Message
           attached
-          header="Daily Vehicle Inspection Report"
-          content="Daily vehicle inspection report"
+          header="Convert CSV into Tables"
+          content="Convert only (,) delimited CSV into tables "
         />
         <Form
           className="attached fluid segment"
@@ -103,17 +102,18 @@ const Excel = () => {
               id="csv"
               name="csv"
               control={TextArea}
-              label="General Comments"
-              placeholder="General Comments"
-              defaultValue={`date,number,4digit, 5digit
-              19-Oct-2018,56000,3333,55555
-              19-Nov-2018,20000,3333,55555
-              19-Dec-2018,28000,3333,55555
-              19-Jan-2019,28000,3333,55555
-              19-Feb-2019,28000,3333,55555
-              19-Mar-2019,28000,3333,55555
-              19-Apr-2019,28000,3333,55555
-              30-Apr-2019,10267,1222,55555`}
+              label="Copy / Paste (,) delimited CSV file only"
+              placeholder="Copy / Paste (,) delimited CSV file only"
+              rows="10"
+              // defaultValue={`date,number,4digit, 5digit
+              // 19-Oct-2018,56000,3333,55555
+              // 19-Nov-2018,20000,3333,55555
+              // 19-Dec-2018,28000,3333,55555
+              // 19-Jan-2019,28000,3333,55555
+              // 19-Feb-2019,28000,3333,55555
+              // 19-Mar-2019,28000,3333,55555
+              // 19-Apr-2019,28000,3333,55555
+              // 30-Apr-2019,10267,1222,55555`}
               onChange={async (e, { name, value }) => {
                 setValue(name, value);
                 await triggerValidation({ name });
@@ -133,22 +133,20 @@ const Excel = () => {
           />
         </Form>
         <Message attached="bottom">
-          Tracking vehicle inspection and Mileage registry is a system that was
-          launched in 2004. The system is currently being used to manage and
-          track the status and historical details of vehicle usage dating back
-          to 1834. The company of former municipalities that now make up the
-          current town has passed more than 200,000 vehicles that are still in
-          records. Questions about this collection should be directed to: Deputy
-          Registrar General, P.O. Box 468900 10899, Green River Road, Thunder
-          Bay, ON P7X 6HT8 or at 1-87090-47691-21956 or 4816-32895-839805.
+          This app is an experimental demo purpose and not fully tested. The
+          software is provided "As is", without warranty of any kind, express or
+          implied. In no event shall the developer be liable for any claim,
+          damages or other liability, whether in an action of contract, tort or
+          otherwise, arising from, out of or in connection with the software or
+          the use or other dealings in this demo.
         </Message>
       </div>
-      <div>
-        {
-          //   loader ? <Loader content="Submitting" size="large" /> : null
-        }
+      <Divider section />
+      {loader ? (
+        <Loader active inline="centered" />
+      ) : (
         <ExcelTable data={state} />
-      </div>
+      )}
     </Container>
   );
 };

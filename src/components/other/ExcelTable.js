@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import ReactDataGrid from "react-data-grid";
 
 import createRowData from "./createRowData";
-
+import { Container, Button } from "semantic-ui-react";
 // import "./styles.css";
 
 const ExcelTable = props => {
@@ -11,7 +11,7 @@ const ExcelTable = props => {
   if (props.data) {
     try {
       let arr = Object.getOwnPropertyNames(props.data[1]);
-      console.log("arr", arr);
+      // console.log("arr", arr);
 
       columns = arr.map(val => {
         return {
@@ -19,19 +19,35 @@ const ExcelTable = props => {
           name: val
         };
       });
-      console.log("columns", columns);
+      // console.log("columns", columns);
     } catch (err) {
-      console.log("Error coming");
+      // console.log("Error coming");
     }
   }
 
   return props.data ? (
-    <ReactDataGrid
-      columns={columns}
-      rowGetter={i => props.data[i]}
-      rowsCount={1000}
-      enableCellSelect={true}
-    />
+    <>
+      <ReactDataGrid
+        columns={columns}
+        rowGetter={i => props.data[i]}
+        rowsCount={1000}
+        enableCellSelect={true}
+      />
+      <Button
+        style={{ marginTop: "2em" }}
+        content="DownLoad SQL"
+        primary
+        disabled
+        onClick={() => {}}
+      />
+      <Button
+        style={{ marginTop: "2em" }}
+        content="Load into SQL Server"
+        primary
+        disabled
+        onClick={() => {}}
+      />
+    </>
   ) : null;
 };
 
